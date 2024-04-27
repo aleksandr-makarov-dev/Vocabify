@@ -18,12 +18,14 @@ namespace Vocabify.API.Controllers
         [HttpGet("scrap")]
         public async Task<FileContentResult> Get([FromQuery] string q)
         {
-            using var browserFetcher = new BrowserFetcher();
-            await browserFetcher.DownloadAsync();
+            await new BrowserFetcher().DownloadAsync();
             var browser = await Puppeteer.LaunchAsync(new LaunchOptions
             {
-                Headless = true
+                Headless = true,
+                Args = new string[] { "--no-sandbox", "--disable-setuid-sandbox" }
             });
+
+            Console.WriteLine("Browser launched successfully.");
             var page = await browser.NewPageAsync();
             await page.GoToAsync(q);
 
