@@ -25,8 +25,11 @@ erDiagram
     Title string
     Description string
     Image string
-    UserId string FK
+    TextLang string
+    DefinitionLang string
+    Url string
     ItemsCount int
+    UserId string FK
   }
 
   TERM {
