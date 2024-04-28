@@ -37,8 +37,8 @@ erDiagram
     Text string
     Definition string
     Image string
-    TextAudioUrl string
-    DefinitionAudioUrl string
+    TextTtsUrl string
+    DefinitionTtsUrl string
     SetId string FK
   }
 
