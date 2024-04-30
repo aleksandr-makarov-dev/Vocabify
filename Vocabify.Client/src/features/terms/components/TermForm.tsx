@@ -12,6 +12,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { termFormSchema } from "../schemas";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import SoundButton from "@/components/common/SoundButton";
 
 interface TermFormProps {
   onSubmit: (values: TermFormSchema) => void;
@@ -69,6 +70,7 @@ const TermForm: FC<TermFormProps> = ({ term, onSubmit }) => {
           <Button type="button" variant="outline">
             Cancel
           </Button>
+          <SoundButton />
           <div className="grow flex justify-end">
             <Button type="button" className="self-end" variant="destructive">
               Delete
