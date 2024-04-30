@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PuppeteerSharp;
 using System;
+using Vocabify.API.Modules.Sets.Models;
+using Vocabify.API.Modules.Sets.Services;
 
 namespace Vocabify.API.Controllers
 {
@@ -8,25 +10,42 @@ namespace Vocabify.API.Controllers
     [ApiController]
     public class SetsController : ControllerBase
     {
+        private readonly ISetsService _setsService;
+        private readonly IImportService _importService;
 
-        [HttpGet("scrapper/puppeteer")]
-        public async Task<FileContentResult> GetPuppeteer([FromQuery] string q = "https://quizlet.com/ru/653463426/sm2-kpl-7-koulutus-opiskelu-flash-cards")
+        public SetsController(ISetsService setsService, IImportService importService)
         {
-            await new BrowserFetcher().DownloadAsync();
-            var browser = await Puppeteer.LaunchAsync(new LaunchOptions
+            _setsService = setsService;
+            _importService = importService;
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] CreateSetDto body)
+        {
+            Guid createdId = await _setsService.CreateAsync(body);
+
+            return Ok(new { id = createdId });
+        }
+
+        [HttpPut("{id:guid}")]
+        public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateSetDto body)
+        {
+            await _setsService.UpdateAsync(id, body);
+
+            return NoContent();
+        }
+
+        [HttpGet("imports/quizlet")]
+        public async Task<IActionResult> ImportFromQuizlet([FromQuery] string q = "https://quizlet.com/ru/862377961/sm2-kpl-1-terveiset-turkista-s-11-flash-cards")
+        {
+            SetWithTermsDto? importedSet = await _importService.FromQuizletAsync(q);
+
+            if (importedSet == null)
             {
-                Headless = true,
-                Args = ["--no-sandbox", "--disable-setuid-sandbox"]
-            });
+                return BadRequest($"Couldn't import quizlet set '{q}'");
+            }
 
-            var page = await browser.NewPageAsync();
-            await page.GoToAsync(q);
-            
-            var stream = await page.PdfDataAsync();
-
-            await browser.CloseAsync();
-
-            return File(stream, "application/pdf","page.pdf");
+            return Ok(importedSet);
         }
     }
 }
