@@ -2,6 +2,7 @@ import { queryClient } from "@/lib/react-query";
 import { QueryClientProvider } from "@tanstack/react-query";
 import React from "react";
 import { FC, PropsWithChildren } from "react";
+import AudioProvider from "./AudioProvider";
 
 export const AppProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
   return (
@@ -15,7 +16,9 @@ export const AppProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
         </div>
       }
     >
-      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+      <QueryClientProvider client={queryClient}>
+        <AudioProvider>{children}</AudioProvider>
+      </QueryClientProvider>
     </React.Suspense>
   );
 };

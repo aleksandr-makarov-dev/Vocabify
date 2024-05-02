@@ -1,7 +1,7 @@
 import { FC } from "react";
 
 interface HeaderProps {
-  title: string;
+  title?: string;
   subtitle?: string;
 }
 

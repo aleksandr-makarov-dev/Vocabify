@@ -57,5 +57,21 @@ namespace Vocabify.API.Modules.Terms.Services
 
             await _context.SaveChangesAsync();
         }
+
+        public async Task<IEnumerable<Term>> GetBySetIdAsync(Guid setId)
+        {
+            return await _context.Terms.Where(t => t.SetId == setId).ToListAsync();
+        }
+
+        public async Task<IEnumerable<Guid>> CreateRangeAsync(IEnumerable<CreateTermDto> list)
+        {
+            IEnumerable<Term> termsToAdd = list.Select(_mapper.CreateTermDtoToTerm).ToList();
+
+            await _context.Terms.AddRangeAsync(termsToAdd);
+
+            await _context.SaveChangesAsync();
+
+            return termsToAdd.Select(t => t.Id);
+        }
     }
 }

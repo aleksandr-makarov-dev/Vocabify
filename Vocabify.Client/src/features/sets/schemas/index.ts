@@ -1,3 +1,4 @@
+import { termFormSchema } from "@/features/terms/schemas";
 import { z } from "zod";
 
 export const setFormSchema = z.object({
@@ -6,4 +7,5 @@ export const setFormSchema = z.object({
   image: z.string().optional(),
   textLang: z.string().length(2),
   definitionLang: z.string().length(2),
+  terms: z.array(termFormSchema).min(2, "Must import at least 2 items"),
 });

@@ -13,19 +13,25 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { setFormSchema } from "../schemas";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import List from "@/components/common/List";
+import TermContent from "@/features/terms/components/TermContent";
+import Card from "@/components/common/Card";
 
 interface SetFormProps {
   set?: SetFormSchema;
+  isLoading?: boolean;
+  edit?: boolean;
   onSubmit: (values: SetFormSchema) => void;
 }
 
-const SetForm: FC<SetFormProps> = ({ set, onSubmit }) => {
+const SetForm: FC<SetFormProps> = ({ set, isLoading, edit, onSubmit }) => {
   const form = useForm<SetFormSchema>({
     resolver: zodResolver(setFormSchema),
     defaultValues: {
       title: "",
-      textLang: "FI",
-      definitionLang: "EN",
+      description: "",
+      textLang: "",
+      definitionLang: "",
     },
     values: set,
   });
@@ -67,7 +73,11 @@ const SetForm: FC<SetFormProps> = ({ set, onSubmit }) => {
               <FormItem>
                 <FormLabel>Text Language</FormLabel>
                 <FormControl>
-                  <Input placeholder="Choose text language" {...field} />
+                  <Input
+                    readOnly
+                    placeholder="Choose text language"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -80,16 +90,45 @@ const SetForm: FC<SetFormProps> = ({ set, onSubmit }) => {
               <FormItem>
                 <FormLabel>Definition Language</FormLabel>
                 <FormControl>
-                  <Input placeholder="Choose definition language" {...field} />
+                  <Input
+                    readOnly
+                    placeholder="Choose definition language"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
         </div>
-        <div className="space-x-3">
-          <Button>Create</Button>
-          <Button variant="outline">Cancel</Button>
+        <FormField
+          control={form.control}
+          name="terms"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Terms</FormLabel>
+              <FormControl>
+                <List
+                  className="flex flex-col gap-3"
+                  items={field.value}
+                  render={(field) => (
+                    <Card key={field.text}>
+                      <TermContent {...field} />
+                    </Card>
+                  )}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <div className="flex flex-col sm:flex-row gap-3">
+          <Button loading={isLoading}>
+            {edit ? "Save changes" : "Create"}
+          </Button>
+          <Button variant="outline" disabled={isLoading}>
+            Cancel
+          </Button>
         </div>
       </form>
     </Form>

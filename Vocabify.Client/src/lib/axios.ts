@@ -1,8 +1,7 @@
-import { API_URL } from "@/config";
 import axios from "axios";
 
 const config = {
-  baseURL: API_URL,
+  baseURL: "http://localhost:8080/api",
   headers: {
     "Content-Type": "application/json",
   },

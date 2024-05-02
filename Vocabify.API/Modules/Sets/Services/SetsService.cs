@@ -56,4 +56,14 @@ public class SetsService:ISetsService
 
         await _context.SaveChangesAsync();
     }
+
+    public async Task<IEnumerable<Set>> GetAllAsync()
+    {
+        return await _context.Sets.ToListAsync();
+    }
+
+    public async Task<Set?> GetByIdAsync(Guid id)
+    {
+        return await _context.Sets.FirstOrDefaultAsync(s => s.Id == id);
+    }
 }

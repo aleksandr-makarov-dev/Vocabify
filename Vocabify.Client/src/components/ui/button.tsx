@@ -38,6 +38,7 @@ export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   asChild?: boolean;
+  icon?: React.ReactNode;
   loading?: boolean;
 }
 
@@ -48,6 +49,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       variant,
       size,
       loading,
+      icon,
       disabled,
       children,
       asChild = false,
@@ -58,13 +60,16 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const Comp = asChild ? Slot : "button";
     return (
       <Comp
-        className={cn(buttonVariants({ variant, size, className }))}
+        className={cn(
+          "flex items-center gap-x-1.5",
+          buttonVariants({ variant, size, className })
+        )}
         disabled={disabled || loading}
         ref={ref}
         {...props}
       >
-        {loading && <Loader2 className="w-5 h-5 animate-spin mr-1.5" />}
-        <span>{children}</span>
+        {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : icon}
+        {children}
       </Comp>
     );
   }

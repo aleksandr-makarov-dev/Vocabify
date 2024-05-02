@@ -20,7 +20,7 @@ const MainLayout: FC = () => {
           },
         ]}
       />
-      <div className="grow max-w-screen-md w-full mx-auto py-8 px-5">
+      <div className="grow max-w-screen-md w-full mx-auto py-8 px-3 sm:px-5">
         <Outlet />
       </div>
       <Footer

@@ -88,7 +88,11 @@ public class ImportService:IImportService
 
             return new SetWithTermsDto
             {
-                Set = set,
+                Title = set.Title,
+                Description = set.Description,
+                TextLang = set.TextLang,
+                DefinitionLang = set.DefinitionLang,
+                Image = set.Image,
                 Terms = terms
             };
         }

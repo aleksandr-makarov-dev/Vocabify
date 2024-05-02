@@ -1,6 +1,7 @@
 import { FC } from "react";
 
 interface SetCardProps {
+  id: string;
   title: string;
   description: string | null;
   image: string | null;
@@ -8,13 +9,13 @@ interface SetCardProps {
   definitionLang: string;
 }
 
-const SetCard: FC<SetCardProps> = ({ title, description }) => {
+const SetCard: FC<SetCardProps> = ({ id, title, description, image }) => {
   return (
     <article>
-      <a className="group" href="/">
+      <a className="group" href={`/${id}`}>
         <img
           className="w-full h-48 object-center object-cover rounded-md mb-3"
-          src="placeholder.png"
+          src={image ?? "placeholder.png"}
           alt="Thumbnail"
         />
         <div>

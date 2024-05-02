@@ -1,13 +1,11 @@
 import { Set } from "@/features/sets/types";
 import { UseQueryOptions, useQuery } from "@tanstack/react-query";
-import { mockSets } from "../constants";
 import { AxiosError } from "axios";
+import axios from "@/lib/axios";
 
 const getSets = async () => {
-  // const response = await axios.get<Set[]>("/sets");
-  // return response.data;
-
-  return mockSets;
+  const response = await axios.get<Set[]>("/sets");
+  return response.data;
 };
 
 type UseSetsQuery = UseQueryOptions<Set[], AxiosError, Set[], unknown[]>;

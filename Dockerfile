@@ -1,5 +1,7 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 as build
 
+EXPOSE 8080
+
 WORKDIR /App
 
 COPY . ./
