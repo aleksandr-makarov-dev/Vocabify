@@ -4,7 +4,7 @@ interface SetCardProps {
   id: string;
   title: string;
   description: string | null;
-  image: string | null;
+  image?: string;
   textLang: string;
   definitionLang: string;
 }

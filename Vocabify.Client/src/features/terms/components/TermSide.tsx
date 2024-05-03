@@ -10,7 +10,7 @@ const TermSide: FC<TermSideProps> = ({ text, image }) => {
   return (
     <div
       className={cn(
-        "flex flex-col-reverse sm:grid grid-cols-2 gap-x-10 gap-y-2 items-center min-h-48",
+        "flex flex-col-reverse sm:grid grid-cols-2 gap-x-10 gap-y-2 items-center justify-center min-h-48",
         {
           "sm:flex": !image,
         }

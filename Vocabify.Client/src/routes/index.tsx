@@ -1,7 +1,7 @@
 import { Home } from "@/features/misc";
 import { Create } from "@/features/sets";
 import Details from "@/features/sets/routes/Details";
-import { Learn } from "@/features/sets/routes/Learn";
+import { Library } from "@/features/sets/routes/Library";
 import Practice from "@/features/sets/routes/Practice";
 import MainLayout from "@/layouts/MainLayout";
 import { FC } from "react";
@@ -17,8 +17,8 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: "learn",
-        element: <Learn />,
+        path: "library",
+        element: <Library />,
       },
       {
         path: "create",

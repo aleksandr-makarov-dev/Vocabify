@@ -4,11 +4,16 @@ import { useSets } from "../api/getSets";
 import SetCard from "./SetCard";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { useSearchParams } from "react-router-dom";
 
 interface SetsListPros extends HTMLAttributes<HTMLDivElement> {}
 
 const SetsList: FC<SetsListPros> = ({ className, ...other }) => {
-  const { data, isLoading, isError, error } = useSets();
+  const [searchParams] = useSearchParams();
+
+  const { data, isLoading, isError, error } = useSets({
+    search: searchParams.get("search"),
+  });
 
   return (
     <List

@@ -8,6 +8,6 @@ public interface ISetsService
     Task<Guid> CreateAsync(CreateSetDto dto);
     Task UpdateAsync(Guid id, UpdateSetDto dto);
     Task DeleteAsync(Guid id);
-    Task<IEnumerable<Set>> GetAllAsync();
+    Task<IEnumerable<Set>> GetAllAsync(int page, string? search);
     Task<Set?> GetByIdAsync(Guid id);
 }

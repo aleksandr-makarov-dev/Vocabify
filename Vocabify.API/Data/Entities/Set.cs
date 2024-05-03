@@ -9,5 +9,6 @@
         public required string DefinitionLang { get; set; }
         public string? Url { get; set; }
         public int ItemsCount { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
 }

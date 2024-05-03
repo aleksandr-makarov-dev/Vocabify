@@ -1,14 +1,16 @@
 import { FC } from "react";
 
 interface NavItemProps {
+  icon: any;
   text: string;
   link: string;
 }
 
-const NavItem: FC<NavItemProps> = ({ text, link }) => {
+const NavItem: FC<NavItemProps> = ({ icon, text, link }) => {
   return (
-    <a className="" href={link}>
-      {text}
+    <a className="p-3" href={link}>
+      <span className="md:hidden">{icon}</span>
+      <span className="hidden md:block">{text}</span>
     </a>
   );
 };

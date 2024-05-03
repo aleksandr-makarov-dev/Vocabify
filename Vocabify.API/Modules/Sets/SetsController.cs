@@ -46,9 +46,10 @@ namespace Vocabify.API.Modules.Sets
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] string? search, [FromQuery] int page = 1)
         {
-            IEnumerable<Set> foundSets = await _setsService.GetAllAsync();  
+            IEnumerable<Set> foundSets = await _setsService.GetAllAsync(page,search);  
+
             return Ok(foundSets);
         }
 

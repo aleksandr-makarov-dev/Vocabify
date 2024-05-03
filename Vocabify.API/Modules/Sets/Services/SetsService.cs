@@ -57,9 +57,21 @@ public class SetsService:ISetsService
         await _context.SaveChangesAsync();
     }
 
-    public async Task<IEnumerable<Set>> GetAllAsync()
+    public async Task<IEnumerable<Set>> GetAllAsync(int page, string? search)
     {
-        return await _context.Sets.ToListAsync();
+        int take = 10;
+
+        var query = _context.Sets.AsQueryable();
+
+        if (!string.IsNullOrEmpty(search))
+        {
+            query = query.Where(s => s.Title.ToLower().Contains(search.ToLower()));
+        }
+        
+        return await query.OrderByDescending(s=>s.CreatedAt)
+            .Skip((page-1)*10)
+            .Take(take)
+            .ToListAsync();
     }
 
     public async Task<Set?> GetByIdAsync(Guid id)

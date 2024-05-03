@@ -24,13 +24,15 @@ type Question = {
   options: { value: string; isCorrect: boolean }[];
 };
 
+export type QuestionState = "idle" | "success" | "error" | "skip";
+
 const Practice = () => {
   const { id } = useParams<{ id: string }>();
   const { data, isLoading } = useTerms({ setId: id! });
   const [terms, setTerms] = useState<Term[]>();
   const [index, setIndex] = useState<number>(0);
   const [question, setQuestion] = useState<Question>();
-  const [state, setState] = useState<boolean>(false);
+  const [state, setState] = useState<QuestionState>("idle");
 
   const form = useForm<PracticeFormSchema>({
     resolver: zodResolver(practiceFormSchema),
@@ -69,13 +71,14 @@ const Practice = () => {
   }, [index, terms]);
 
   const onSubmit = (values: PracticeFormSchema) => {
-    setState(true);
+    setState(question?.term.text === values.answer ? "success" : "error");
+  };
 
-    if (values.answer === question?.term.text) {
-      form.reset();
-      setState(false);
-      setIndex((prev) => prev + 1);
-    }
+  const OnNext = () => {
+    setState("idle");
+    form.reset();
+
+    setIndex((prev) => prev + 1);
   };
 
   if (isLoading) {
@@ -102,9 +105,23 @@ const Practice = () => {
             options={question.options}
             state={state}
           />
-          <div className="text-end space-x-3  ">
-            <Button variant="ghost">Don't know?</Button>
-            <Button>Answer</Button>
+          <div className="text-end">
+            {state !== "idle" ? (
+              <Button type="button" onClick={OnNext}>
+                Continue
+              </Button>
+            ) : (
+              <div className="space-x-3">
+                <Button
+                  variant="ghost"
+                  type="button"
+                  onClick={() => setState("skip")}
+                >
+                  Don't know?
+                </Button>
+                <Button>Answer</Button>
+              </div>
+            )}
           </div>
         </form>
       </Form>

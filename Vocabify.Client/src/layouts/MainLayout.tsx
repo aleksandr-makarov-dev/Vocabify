@@ -1,6 +1,6 @@
 import Footer from "@/components/containers/Footer";
 import Navbar from "@/components/containers/Navbar";
-import { Github } from "lucide-react";
+import { BookText, Github, Home, Plus } from "lucide-react";
 import { FC } from "react";
 import { Outlet } from "react-router-dom";
 
@@ -9,15 +9,13 @@ const MainLayout: FC = () => {
     <div className="min-h-screen flex flex-col bg-gray-50">
       <Navbar
         navItems={[
-          { text: "Home", link: "/" },
+          { icon: <Home className="w-6 h-6" />, text: "Home", link: "/" },
           {
-            text: "Learn",
-            link: "/learn",
+            icon: <BookText className="w-6 h-6" />,
+            text: "Your library",
+            link: "/library",
           },
-          {
-            text: "New",
-            link: "/create",
-          },
+          { icon: <Plus className="w-6 h-6" />, text: "New", link: "/create" },
         ]}
       />
       <div className="grow max-w-screen-md w-full mx-auto py-8 px-3 sm:px-5">

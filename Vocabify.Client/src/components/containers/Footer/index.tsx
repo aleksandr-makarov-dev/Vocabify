@@ -8,8 +8,8 @@ interface FooterProps {
 
 const Footer: FC<FooterProps> = ({ text, navIcons }) => {
   return (
-    <footer className="bg-muted">
-      <div className="max-w-screen-2xl flex items-center p-5">
+    <footer className="bg-muted flex justify-center">
+      <div className="max-w-screen-xl flex items-center w-full p-5">
         <div className="w-full">
           <p className="text-muted-foreground">{text}</p>
         </div>
