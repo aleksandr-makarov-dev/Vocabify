@@ -1,6 +1,6 @@
 ﻿namespace Vocabify.API.Modules.Sets.Models
 {
-    public class ImportSetDto
+    public class ImportSetModel
     {
         public required string Url { get; set; }
     }

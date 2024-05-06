@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PuppeteerSharp;
 using System;
+using Microsoft.AspNetCore.Authorization;
 using Vocabify.API.Data.Entities;
 using Vocabify.API.Models;
 using Vocabify.API.Modules.Sets.Models;
@@ -22,7 +23,7 @@ namespace Vocabify.API.Modules.Sets
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateSetDto body)
+        public async Task<IActionResult> Create([FromBody] CreateSetModel body)
         {
             Guid createdId = await _setsService.CreateAsync(body);
 
@@ -30,7 +31,7 @@ namespace Vocabify.API.Modules.Sets
         }
 
         [HttpPut("{id:guid}")]
-        public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateSetDto body)
+        public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateSetModel body)
         {
             await _setsService.UpdateAsync(id, body);
 
@@ -46,6 +47,7 @@ namespace Vocabify.API.Modules.Sets
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetAll([FromQuery] string? search, [FromQuery] int page = 1)
         {
             IEnumerable<Set> foundSets = await _setsService.GetAllAsync(page,search);  
@@ -69,7 +71,7 @@ namespace Vocabify.API.Modules.Sets
         [HttpGet("import")]
         public async Task<IActionResult> Import([FromQuery] string url)
         {
-            SetWithTermsDto? importedSet = await _importService.FromQuizletAsync(url);
+            SetWithTermsModel? importedSet = await _importService.FromQuizletAsync(url);
 
             if (importedSet == null)
             {

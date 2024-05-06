@@ -5,9 +5,9 @@ namespace Vocabify.API.Modules.Terms.Services;
 
 public interface ITermsService
 {
-    Task<Guid> CreateAsync(CreateTermDto dto);
-    Task UpdateAsync(Guid id, UpdateTermDto dto);
+    Task<Guid> CreateAsync(CreateTermModel dto);
+    Task UpdateAsync(Guid id, UpdateTermModel dto);
     Task DeleteAsync(Guid id);
     Task<IEnumerable<Term>> GetBySetIdAsync(Guid setId);
-    Task<IEnumerable<Guid>> CreateRangeAsync(IEnumerable<CreateTermDto> list);
+    Task<IEnumerable<Guid>> CreateRangeAsync(IEnumerable<CreateTermModel> list);
 }

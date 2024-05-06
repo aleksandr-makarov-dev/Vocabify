@@ -28,7 +28,7 @@ export type QuestionState = "idle" | "success" | "error" | "skip";
 
 const Practice = () => {
   const { id } = useParams<{ id: string }>();
-  const { data, isLoading } = useTerms({ setId: id! });
+  const { data, isLoading, isError, error } = useTerms({ setId: id! });
   const [terms, setTerms] = useState<Term[]>();
   const [index, setIndex] = useState<number>(0);
   const [question, setQuestion] = useState<Question>();
@@ -83,6 +83,10 @@ const Practice = () => {
 
   if (isLoading) {
     return <p>Loading...</p>;
+  }
+
+  if (isError) {
+    return <p>{error.message}</p>;
   }
 
   if (!question) {

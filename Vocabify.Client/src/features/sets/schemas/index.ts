@@ -9,3 +9,7 @@ export const setFormSchema = z.object({
   definitionLang: z.string().length(2),
   terms: z.array(termFormSchema).min(2, "Must import at least 2 items"),
 });
+
+export const setImportSchema = z.object({
+  url: z.string().min(1),
+});

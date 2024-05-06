@@ -5,6 +5,6 @@ namespace Vocabify.API.Modules.Sets.Services
 {
     public interface IImportService
     {
-        Task<SetWithTermsDto?> FromQuizletAsync(string url);
+        Task<SetWithTermsModel?> FromQuizletAsync(string url);
     }
 }

@@ -3,6 +3,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import React from "react";
 import { FC, PropsWithChildren } from "react";
 import AudioProvider from "./AudioProvider";
+import SessionProvider from "@/features/accounts/providers/SessionProvider";
 
 export const AppProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
   return (
@@ -17,7 +18,9 @@ export const AppProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
       }
     >
       <QueryClientProvider client={queryClient}>
-        <AudioProvider>{children}</AudioProvider>
+        <SessionProvider>
+          <AudioProvider>{children}</AudioProvider>
+        </SessionProvider>
       </QueryClientProvider>
     </React.Suspense>
   );

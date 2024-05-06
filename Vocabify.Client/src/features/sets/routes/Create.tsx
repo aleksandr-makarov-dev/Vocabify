@@ -1,9 +1,9 @@
 import Header from "@/components/common/Header";
 import { FC, useState } from "react";
 import SetForm from "../components/SetForm";
-import { SetFormSchema } from "../types";
+import { SetFormSchema, SetImportSchema } from "../types";
 import { useCreateSet } from "../api/createSet";
-import SetImportForm, { SetImportSchema } from "../components/SetImportForm";
+import SetImportForm from "../components/SetImportForm";
 import { useImportSet } from "../api/importSet";
 import { useCreateTerms } from "@/features/terms/api/сreateTerms";
 import { TermFormSchema } from "@/features/terms/types";

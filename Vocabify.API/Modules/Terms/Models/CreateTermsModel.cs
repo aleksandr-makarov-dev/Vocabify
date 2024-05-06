@@ -2,8 +2,8 @@
 
 namespace Vocabify.API.Modules.Terms.Models
 {
-    public class CreateTermsDto
+    public class CreateTermsModel
     {
-        public IEnumerable<CreateTermDto> Terms { get; set; }
+        public IEnumerable<CreateTermModel> Terms { get; set; }
     }
 }

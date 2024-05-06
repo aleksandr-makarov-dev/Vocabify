@@ -1,6 +1,6 @@
 ﻿namespace Vocabify.API.Modules.Terms.Models
 {
-    public class UpdateTermDto
+    public class UpdateTermModel
     {
         public string? Text { get; set; }
         public string? Definition { get; set; }

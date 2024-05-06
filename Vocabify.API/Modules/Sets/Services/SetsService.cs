@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Vocabify.API.Data;
 using Vocabify.API.Data.Entities;
+using Vocabify.API.Modules.Core.Exceptions;
 using Vocabify.API.Modules.Sets.Models;
 
 namespace Vocabify.API.Modules.Sets.Services;
@@ -16,9 +17,9 @@ public class SetsService:ISetsService
         _mapper = new SetMapper();
     }
 
-    public async Task<Guid> CreateAsync(CreateSetDto dto)
+    public async Task<Guid> CreateAsync(CreateSetModel model)
     {
-        Set setToCreate = _mapper.CreateSetDtoToSet(dto);
+        Set setToCreate = _mapper.CreateSetToSet(model);
 
         await _context.AddAsync(setToCreate);
 
@@ -27,16 +28,16 @@ public class SetsService:ISetsService
         return setToCreate.Id;
     }
 
-    public async Task UpdateAsync(Guid id, UpdateSetDto dto)
+    public async Task UpdateAsync(Guid id, UpdateSetModel model)
     {
         Set? setToUpdate = await _context.Sets.FirstOrDefaultAsync(s => s.Id == id);
 
         if (setToUpdate == null)
         {
-            throw new Exception($"Set '{id}' not found");
+            throw new NotFoundException($"Set '{id}' not found");
         }
 
-        _mapper.UpdateSetDtoToSet(dto,setToUpdate);
+        _mapper.UpdateSetToSet(model,setToUpdate);
 
         _context.Update(setToUpdate);
 
@@ -49,7 +50,7 @@ public class SetsService:ISetsService
 
         if (setToDelete == null)
         {
-            throw new Exception($"Set '{id}' not found");
+            throw new NotFoundException($"Set '{id}' not found");
         }
 
         _context.Sets.Remove(setToDelete);

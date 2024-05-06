@@ -5,7 +5,6 @@ import { ObjectId } from "@/types";
 import axios from "@/lib/axios";
 
 const createSet = async (values: CreateSetSchema): Promise<ObjectId> => {
-  console.log(values);
   const response = await axios.post<ObjectId>("/sets", values);
   return response.data;
 };

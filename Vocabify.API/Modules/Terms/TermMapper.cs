@@ -8,19 +8,19 @@ namespace Vocabify.API.Modules.Terms;
 [Mapper]
 public partial class TermMapper
 {
-    public partial Term CreateTermDtoToTerm(CreateTermDto dto);
-    public partial void UpdateTermDtoToTerm(UpdateTermDto dto, Term term);
+    public partial Term CreateTermToTerm(CreateTermModel model);
+    public partial void UpdateTermToTerm(UpdateTermModel model, Term term);
 
-    public Term StudiableItemToTerm(StudiableItem dto)
+    public Term StudiableItemToTerm(StudiableItem model)
     {
-        Media word = dto.CardSides[0].Media[0];
-        Media def = dto.CardSides[1].Media[0];
+        Media word = model.CardSides[0].Media[0];
+        Media def = model.CardSides[1].Media[0];
 
         string? imageUrl = null;
 
-        if (dto.CardSides[1].Media.Count > 1)
+        if (model.CardSides[1].Media.Count > 1)
         {
-            imageUrl = dto.CardSides[1].Media[1].Url;
+            imageUrl = model.CardSides[1].Media[1].Url;
         }
 
         return new Term

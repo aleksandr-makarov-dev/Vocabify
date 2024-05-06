@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Vocabify.API.Data;
 using Vocabify.API.Data.Entities;
-using Vocabify.API.Modules.Sets.Models;
+using Vocabify.API.Modules.Core.Exceptions;
 using Vocabify.API.Modules.Terms.Models;
 
 namespace Vocabify.API.Modules.Terms.Services
@@ -17,9 +17,9 @@ namespace Vocabify.API.Modules.Terms.Services
             _mapper = new TermMapper();
         }
 
-        public async Task<Guid> CreateAsync(CreateTermDto dto)
+        public async Task<Guid> CreateAsync(CreateTermModel model)
         {
-            Term term = _mapper.CreateTermDtoToTerm(dto);
+            Term term = _mapper.CreateTermToTerm(model);
 
             await _context.AddAsync(term);
 
@@ -28,16 +28,16 @@ namespace Vocabify.API.Modules.Terms.Services
             return term.Id;
         }
 
-        public async Task UpdateAsync(Guid id, UpdateTermDto dto)
+        public async Task UpdateAsync(Guid id, UpdateTermModel model)
         {
             Term? termToUpdate = await _context.Terms.FirstOrDefaultAsync(t => t.Id == id);
 
             if (termToUpdate == null)
             {
-                throw new Exception($"Term '{id}' not found");
+                throw new NotFoundException($"Term '{id}' not found");
             }
 
-            _mapper.UpdateTermDtoToTerm(dto, termToUpdate);
+            _mapper.UpdateTermToTerm(model, termToUpdate);
 
             _context.Update(termToUpdate);
 
@@ -50,7 +50,7 @@ namespace Vocabify.API.Modules.Terms.Services
 
             if (termToDelete == null)
             {
-                throw new Exception($"Term '{id}' not found");
+                throw new NotFoundException($"Term '{id}' not found");
             }
 
             _context.Terms.Remove(termToDelete);
@@ -63,9 +63,9 @@ namespace Vocabify.API.Modules.Terms.Services
             return await _context.Terms.Where(t => t.SetId == setId).ToListAsync();
         }
 
-        public async Task<IEnumerable<Guid>> CreateRangeAsync(IEnumerable<CreateTermDto> list)
+        public async Task<IEnumerable<Guid>> CreateRangeAsync(IEnumerable<CreateTermModel> list)
         {
-            IEnumerable<Term> termsToAdd = list.Select(_mapper.CreateTermDtoToTerm).ToList();
+            IEnumerable<Term> termsToAdd = list.Select(_mapper.CreateTermToTerm).ToList();
 
             await _context.Terms.AddRangeAsync(termsToAdd);
 

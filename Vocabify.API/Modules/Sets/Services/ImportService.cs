@@ -3,6 +3,7 @@ using System.Text.Json.Serialization;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using Vocabify.API.Data.Entities;
+using Vocabify.API.Modules.Core.Exceptions;
 using Vocabify.API.Modules.Sets.Models;
 using Vocabify.API.Modules.Terms;
 
@@ -12,14 +13,16 @@ public class ImportService:IImportService
 {
     private readonly SetMapper _setMapper;
     private readonly TermMapper _termMapper;
+    private readonly ILogger<ImportService> _logger;
 
-    public ImportService()
+    public ImportService(ILogger<ImportService> logger)
     {
+        _logger = logger;
         _termMapper = new TermMapper();
         _setMapper = new SetMapper();
     }
 
-    public async Task<SetWithTermsDto?> FromQuizletAsync(string url)
+    public async Task<SetWithTermsModel?> FromQuizletAsync(string url)
     {
         await new BrowserFetcher().DownloadAsync();
 
@@ -52,11 +55,11 @@ public class ImportService:IImportService
 
         if (match.Success)
         {
-            Console.WriteLine("Pattern found...");
+            _logger.LogInformation("Pattern found...");
 
             string jsonData = match.Groups[1].Value;
 
-            Console.WriteLine("Parsing data...");
+            _logger.LogInformation("Parsing data...");
 
             QuizletResponse? response = JsonSerializer.Deserialize<QuizletResponse>(jsonData, new JsonSerializerOptions
             {
@@ -73,10 +76,10 @@ public class ImportService:IImportService
 
             if (dehydratedReduxStateKey == null)
             {
-                throw new Exception("Failed to import from quizlet");
+                throw new DomainException("Failed to import from quizlet");
             }
 
-            Console.WriteLine("Returning result...");
+            _logger.LogInformation("Returning result...");
 
             Set set = _setMapper.QuizletSetToSet(dehydratedReduxStateKey.SetPage.Set);
             IEnumerable<Term> terms = dehydratedReduxStateKey.StudyModesCommon
@@ -86,7 +89,7 @@ public class ImportService:IImportService
                     _termMapper.StudiableItemToTerm(si)
                     );
 
-            return new SetWithTermsDto
+            return new SetWithTermsModel
             {
                 Title = set.Title,
                 Description = set.Description,

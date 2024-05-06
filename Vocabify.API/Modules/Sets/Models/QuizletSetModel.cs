@@ -2,7 +2,7 @@
 
 namespace Vocabify.API.Modules.Sets.Models
 {
-    public class QuizletSet
+    public class QuizletSetModel
     {
 
 
@@ -96,7 +96,7 @@ namespace Vocabify.API.Modules.Sets.Models
     public class SetPage
     {
         [JsonPropertyName("set")]
-        public QuizletSet Set { get; set; }
+        public QuizletSetModel Set { get; set; }
     }
 
     public class StudiableData

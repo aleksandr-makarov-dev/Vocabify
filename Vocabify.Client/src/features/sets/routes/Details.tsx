@@ -18,8 +18,16 @@ import SetToolbar from "../components/SetToolbar";
 
 const Details: FC = () => {
   const { id } = useParams<{ id: string }>();
-  const { data: set } = useSetById({ id: id! });
+  const { data: set, isLoading, isError, error } = useSetById({ id: id! });
   const { data: terms, isLoading: isTermsLoading } = useTerms({ setId: id! });
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+
+  if (isError) {
+    return <p>{error.message}</p>;
+  }
 
   return (
     <div className="space-y-5">

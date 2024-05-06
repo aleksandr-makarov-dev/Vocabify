@@ -25,7 +25,7 @@ namespace Vocabify.API.Modules.Terms
         }
 
         [HttpPost("bulk")]
-        public async Task<IActionResult> CreateBulk([FromBody] CreateTermsDto body)
+        public async Task<IActionResult> CreateBulk([FromBody] CreateTermsModel body)
         {
             IEnumerable<Guid> createdIds = await _termsService.CreateRangeAsync(body.Terms);
 

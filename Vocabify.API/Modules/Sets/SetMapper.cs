@@ -7,13 +7,13 @@ namespace Vocabify.API.Modules.Sets;
 [Mapper]
 public partial class SetMapper
 {
-    public partial Set CreateSetDtoToSet(CreateSetDto dto);
-    public partial void UpdateSetDtoToSet(UpdateSetDto dto, Set set);
+    public partial Set CreateSetToSet(CreateSetModel model);
+    public partial void UpdateSetToSet(UpdateSetModel model, Set set);
 
-    [MapProperty(nameof(QuizletSet.WordLang),nameof(Set.TextLang))]
-    [MapProperty(nameof(QuizletSet.DefLang), nameof(Set.DefinitionLang))]
-    [MapProperty(nameof(QuizletSet.NumTerms), nameof(Set.ItemsCount))]
-    [MapProperty(nameof(QuizletSet.WebUrl), nameof(Set.Url))]
-    [MapProperty(nameof(QuizletSet.ThumbnailUrl), nameof(Set.Image))]
-    public partial Set QuizletSetToSet(QuizletSet dto);
+    [MapProperty(nameof(QuizletSetModel.WordLang),nameof(Set.TextLang))]
+    [MapProperty(nameof(QuizletSetModel.DefLang), nameof(Set.DefinitionLang))]
+    [MapProperty(nameof(QuizletSetModel.NumTerms), nameof(Set.ItemsCount))]
+    [MapProperty(nameof(QuizletSetModel.WebUrl), nameof(Set.Url))]
+    [MapProperty(nameof(QuizletSetModel.ThumbnailUrl), nameof(Set.Image))]
+    public partial Set QuizletSetToSet(QuizletSetModel dto);
 }

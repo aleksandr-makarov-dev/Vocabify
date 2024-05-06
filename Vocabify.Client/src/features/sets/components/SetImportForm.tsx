@@ -11,13 +11,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Import } from "lucide-react";
 import { FC } from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
-
-const setImportSchema = z.object({
-  url: z.string().min(1),
-});
-
-export type SetImportSchema = z.infer<typeof setImportSchema>;
+import { setImportSchema } from "../schemas";
+import { SetImportSchema } from "../types";
 
 interface SetImportFormProps {
   onSubmit: (values: SetImportSchema) => void;

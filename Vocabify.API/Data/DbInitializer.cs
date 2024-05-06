@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Vocabify.API.Data.Entities;
+using Vocabify.API.Modules.Accounts.Models;
 using Vocabify.API.Modules.Sets.Models;
 using Vocabify.API.Modules.Sets.Services;
 using Vocabify.API.Modules.Terms.Models;
@@ -11,7 +13,7 @@ namespace Vocabify.API.Data
     {
         public static async Task Seed(IServiceScope scope)
         {
-            List<CreateSetDto> setsToCreate = new List<CreateSetDto>
+            List<CreateSetModel> setsToCreate = new List<CreateSetModel>
             {
                 new()
                 {
@@ -73,11 +75,25 @@ namespace Vocabify.API.Data
             ISetsService setsService = scope.ServiceProvider.GetRequiredService<ISetsService>();
             ITermsService termsService = scope.ServiceProvider.GetRequiredService<ITermsService>();
 
-
             ApplicationDbContext context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
             await context.Database.EnsureCreatedAsync();
 
+            // create roles
+            RoleManager<IdentityRole> roleManager =
+                scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+            if (await roleManager.RoleExistsAsync(Roles.Admin))
+            {
+                await roleManager.CreateAsync(new IdentityRole(Roles.Admin));
+            }
+
+            if (!await roleManager.RoleExistsAsync(Roles.User))
+            {
+                await roleManager.CreateAsync(new IdentityRole(Roles.User));
+            }
+
+            // create sets
             if (!await context.Sets.AnyAsync())
             {
                 foreach (var set in setsToCreate)
@@ -87,11 +103,10 @@ namespace Vocabify.API.Data
             }
 
             Set foundSet = await context.Sets.FirstOrDefaultAsync();
-            
 
-            List<CreateTermDto> terms = new List<CreateTermDto>
+            List<CreateTermModel> terms = new List<CreateTermModel>
             {
-                new CreateTermDto
+                new CreateTermModel
                 {
                     Text = "Terveiset",
                     Definition = "Привет из",
@@ -100,7 +115,7 @@ namespace Vocabify.API.Data
                     DefinitionTtsUrl = "/tts/ru.mp3?v=8&b=0J.RgNC40LLQtdGCINC40Lc&s=qWnguiUW",
                     SetId = foundSet.Id
                 },
-                new CreateTermDto
+                new CreateTermModel
                 {
                     Text = "Turkki",
                     Definition = "Турция",
@@ -109,7 +124,7 @@ namespace Vocabify.API.Data
                     DefinitionTtsUrl = "/tts/ru.mp3?v=8&b=0KLRg9GA0YbQuNGP&s=JyscAJig",
                     SetId = foundSet.Id
                 },
-                new CreateTermDto
+                new CreateTermModel
                 {
                     Text = "ottaa aurinkoa",
                     Definition = "загорать",
@@ -118,7 +133,7 @@ namespace Vocabify.API.Data
                     DefinitionTtsUrl = "/tts/ru.mp3?v=8&b=0LfQsNCz0L7RgNCw0YLRjA&s=mf1kUO-Q",
                     SetId = foundSet.Id
                 },
-                new CreateTermDto
+                new CreateTermModel
                 {
                     Text = "ihana",
                     Definition = "замечательный",
@@ -127,7 +142,7 @@ namespace Vocabify.API.Data
                     DefinitionTtsUrl = "/tts/ru.mp3?v=8&b=0LfQsNC80LXRh9Cw0YLQtdC70YzQvdGL0Lk&s=rC5TQ4hD",
                     SetId = foundSet.Id
                 },
-                new CreateTermDto
+                new CreateTermModel
                 {
                     Text = "vuokra-auto",
                     Definition = "арендованный автомобиль",
@@ -137,7 +152,7 @@ namespace Vocabify.API.Data
                         "/tts/ru.mp3?v=8&b=0LDRgNC10L3QtNC-0LLQsNC90L3Ri9C5INCw0LLRgtC-0LzQvtCx0LjQu9GM&s=nXN31e9E",
                     SetId = foundSet.Id
                 },
-                new CreateTermDto
+                new CreateTermModel
                 {
                     Text = "kuuluisa",
                     Definition = "известный",
@@ -146,7 +161,7 @@ namespace Vocabify.API.Data
                     DefinitionTtsUrl = "/tts/ru.mp3?v=8&b=0LjQt9Cy0LXRgdGC0L3Ri9C5&s=hMsazBlC",
                     SetId = foundSet.Id
                 },
-                new CreateTermDto
+                new CreateTermModel
                 {
                     Text = "toinen",
                     Definition = "другой, второй",
@@ -155,7 +170,7 @@ namespace Vocabify.API.Data
                     DefinitionTtsUrl = "/tts/ru.mp3?v=8&b=0LTRgNGD0LPQvtC5LCDQstGC0L7RgNC-0Lk&s=nqKRueyh",
                     SetId = foundSet.Id
                 },
-                new CreateTermDto
+                new CreateTermModel
                 {
                     Text = "vesiputous",
                     Definition = "водопад",
@@ -164,7 +179,7 @@ namespace Vocabify.API.Data
                     DefinitionTtsUrl = "/tts/ru.mp3?v=8&b=0LLQvtC00L7Qv9Cw0LQ&s=WlpperGs",
                     SetId = foundSet.Id
                 },
-                new CreateTermDto
+                new CreateTermModel
                 {
                     Text = "retki",
                     Definition = "экскурсия",
@@ -173,7 +188,7 @@ namespace Vocabify.API.Data
                     DefinitionTtsUrl = "/tts/ru.mp3?v=8&b=0Y3QutGB0LrRg9GA0YHQuNGP&s=09kED.-T",
                     SetId = foundSet.Id
                 },
-                new CreateTermDto
+                new CreateTermModel
                 {
                     Text = "jäädä",
                     Definition = "оставаться",
@@ -182,7 +197,7 @@ namespace Vocabify.API.Data
                     DefinitionTtsUrl = "/tts/ru.mp3?v=8&b=0L7RgdGC0LDQstCw0YLRjNGB0Y8&s=dcbi9m76",
                     SetId = foundSet.Id
                 },
-                new CreateTermDto
+                new CreateTermModel
                 {
                     Text = "löytää",
                     Definition = "находить",
@@ -191,7 +206,7 @@ namespace Vocabify.API.Data
                     DefinitionTtsUrl = "/tts/ru.mp3?v=8&b=0L3QsNGF0L7QtNC40YLRjA&s=KTLDJOiQ",
                     SetId = foundSet.Id
                 },
-                new CreateTermDto
+                new CreateTermModel
                 {
                     Text = "kahvila",
                     Definition = "кафе",
@@ -200,7 +215,7 @@ namespace Vocabify.API.Data
                     DefinitionTtsUrl = "/tts/ru.mp3?v=8&b=0LrQsNGE0LU&s=ENygFpYA",
                     SetId = foundSet.Id
                 },
-                new CreateTermDto
+                new CreateTermModel
                 {
                     Text = "annos",
                     Definition = "порция",
@@ -209,7 +224,7 @@ namespace Vocabify.API.Data
                     DefinitionTtsUrl = "/tts/ru.mp3?v=8&b=0L.QvtGA0YbQuNGP&s=RENmG1xw",
                     SetId = foundSet.Id
                 },
-                new CreateTermDto
+                new CreateTermModel
                 {
                     Text = "onneksi",
                     Definition = "к счастью",
@@ -218,7 +233,7 @@ namespace Vocabify.API.Data
                     DefinitionTtsUrl = "/tts/ru.mp3?v=8&b=0Log0YHRh9Cw0YHRgtGM0Y4&s=EdUs8Ftm",
                     SetId = foundSet.Id
                 },
-                new CreateTermDto
+                new CreateTermModel
                 {
                     Text = "olla jäljellä",
                     Definition = "осталось",
