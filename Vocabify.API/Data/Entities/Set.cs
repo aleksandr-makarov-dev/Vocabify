@@ -1,4 +1,6 @@
-﻿namespace Vocabify.API.Data.Entities
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace Vocabify.API.Data.Entities
 {
     public class Set:EntityBase
     {
@@ -7,8 +9,8 @@
         public string? Image { get; set; }
         public required string TextLang { get; set; }
         public required string DefinitionLang { get; set; }
-        public string? Url { get; set; }
-        public int ItemsCount { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public string UserId { get; set; }
+        public IdentityUser User { get; set; }
     }
 }

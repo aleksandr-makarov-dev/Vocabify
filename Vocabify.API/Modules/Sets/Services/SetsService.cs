@@ -17,9 +17,10 @@ public class SetsService:ISetsService
         _mapper = new SetMapper();
     }
 
-    public async Task<Guid> CreateAsync(CreateSetModel model)
+    public async Task<Guid> CreateAsync(CreateSetModel model, string userId)
     {
         Set setToCreate = _mapper.CreateSetToSet(model);
+        setToCreate.UserId = userId;
 
         await _context.AddAsync(setToCreate);
 
@@ -58,11 +59,11 @@ public class SetsService:ISetsService
         await _context.SaveChangesAsync();
     }
 
-    public async Task<IEnumerable<Set>> GetAllAsync(int page, string? search)
+    public async Task<IEnumerable<Set>> GetAllAsync(int page, string userId, string? search)
     {
         int take = 10;
 
-        var query = _context.Sets.AsQueryable();
+        var query = _context.Sets.Where(s=>s.UserId == userId);
 
         if (!string.IsNullOrEmpty(search))
         {

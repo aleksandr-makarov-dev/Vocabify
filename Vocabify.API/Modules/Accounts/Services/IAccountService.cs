@@ -9,5 +9,6 @@ namespace Vocabify.API.Modules.Accounts.Services
         Task ConfirmEmailAsync(ConfirmEmailModel model);
         Task LogoutAsync();
         Task<UserInfoModel> GetUserInfoAsync(string id);
+        Task<IEnumerable<UserInfoModel>> GetUsersAsync();
     }
 }

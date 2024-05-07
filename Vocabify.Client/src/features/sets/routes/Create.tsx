@@ -7,8 +7,10 @@ import SetImportForm from "../components/SetImportForm";
 import { useImportSet } from "../api/importSet";
 import { useCreateTerms } from "@/features/terms/api/сreateTerms";
 import { TermFormSchema } from "@/features/terms/types";
+import { useNavigate } from "react-router-dom";
 
 export const Create: FC = () => {
+  const navigate = useNavigate();
   const [url, setUrl] = useState<string>("");
 
   const { data, isLoading } = useImportSet(
@@ -20,10 +22,18 @@ export const Create: FC = () => {
     }
   );
 
-  const { mutate: createSetMutate, isPending: isCreateSetLoading } =
-    useCreateSet();
-  const { mutate: createTermsMutate, isPending: isCreateTermsLoading } =
-    useCreateTerms();
+  const {
+    mutate: createSetMutate,
+    isPending: isCreateSetLoading,
+    isError: isCreateSetError,
+    error: createSetError,
+  } = useCreateSet();
+  const {
+    mutate: createTermsMutate,
+    isPending: isCreateTermsLoading,
+    isError: isCreateTermsError,
+    error: createTermsError,
+  } = useCreateTerms();
 
   const onSubmit = ({
     title,
@@ -44,14 +54,11 @@ export const Create: FC = () => {
               ),
             },
             {
-              onError: (error) => {
-                console.log("terms:", error);
+              onSuccess: () => {
+                navigate(`/${id}`);
               },
             }
           );
-        },
-        onError: (error) => {
-          console.log("sets:", error);
         },
       }
     );

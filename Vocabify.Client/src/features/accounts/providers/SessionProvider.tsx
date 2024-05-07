@@ -1,11 +1,4 @@
-import {
-  FC,
-  PropsWithChildren,
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { FC, PropsWithChildren, createContext, useContext } from "react";
 import { useUserInfo } from "../api/getUserInfo";
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -25,7 +18,7 @@ const SessionContext = createContext<SessionContextData | undefined>(undefined);
 
 const SessionProvider: FC<PropsWithChildren> = ({ children }) => {
   const queryClient = useQueryClient();
-  const { data, isLoading } = useUserInfo();
+  const { data, isFetching, isLoading, isRefetching } = useUserInfo();
 
   const login = () => {
     queryClient.invalidateQueries({ queryKey: ["accounts", "info"] });
@@ -39,7 +32,7 @@ const SessionProvider: FC<PropsWithChildren> = ({ children }) => {
     <SessionContext.Provider
       value={{
         user: data,
-        isLoading: isLoading,
+        isLoading: isFetching || isLoading || isRefetching,
         login: login,
         logout: logout,
       }}

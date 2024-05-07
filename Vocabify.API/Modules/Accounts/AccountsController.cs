@@ -21,6 +21,7 @@ namespace Vocabify.API.Modules.Accounts
         }
 
         [HttpPost("register")]
+        [AllowAnonymous]
         public async Task<IActionResult> Register([FromBody] RegisterModel model)
         {
             await _accountService.RegisterAsync(model);
@@ -33,6 +34,7 @@ namespace Vocabify.API.Modules.Accounts
         }
 
         [HttpPost("confirm-email")]
+        [Authorize(Roles = Roles.Admin)]
         public async Task<IActionResult> ConfirmEmail([FromBody] ConfirmEmailModel model)
         {
             await _accountService.ConfirmEmailAsync(model);
@@ -57,6 +59,7 @@ namespace Vocabify.API.Modules.Accounts
         }
 
         [HttpDelete("logout")]
+        [Authorize]
         public async Task<IActionResult> Logout()
         {
             await _accountService.LogoutAsync();
@@ -78,6 +81,15 @@ namespace Vocabify.API.Modules.Accounts
             UserInfoModel userInfo = await _accountService.GetUserInfoAsync(id);
 
             return Ok(userInfo);
+        }
+
+        [HttpGet]
+        [Authorize(Roles = Roles.Admin)]
+        public async Task<IActionResult> Users()
+        {
+            IEnumerable<UserInfoModel> users = await _accountService.GetUsersAsync();
+
+            return Ok(users);
         }
     }
 }

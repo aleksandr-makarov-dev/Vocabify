@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Vocabify.API.Data.Entities;
 using Vocabify.API.Modules.Terms.Models;
 using Vocabify.API.Modules.Terms.Services;
@@ -7,6 +8,7 @@ namespace Vocabify.API.Modules.Terms
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class TermsController : ControllerBase
     {
         private readonly ITermsService _termsService;

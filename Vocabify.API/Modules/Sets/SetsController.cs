@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PuppeteerSharp;
 using System;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Vocabify.API.Data.Entities;
 using Vocabify.API.Models;
@@ -11,6 +12,7 @@ namespace Vocabify.API.Modules.Sets
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class SetsController : ControllerBase
     {
         private readonly ISetsService _setsService;
@@ -25,7 +27,9 @@ namespace Vocabify.API.Modules.Sets
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateSetModel body)
         {
-            Guid createdId = await _setsService.CreateAsync(body);
+            string userId = User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
+
+            Guid createdId = await _setsService.CreateAsync(body, userId);
 
             return Ok(new ObjectId { Id = createdId });
         }
@@ -50,7 +54,9 @@ namespace Vocabify.API.Modules.Sets
         [Authorize]
         public async Task<IActionResult> GetAll([FromQuery] string? search, [FromQuery] int page = 1)
         {
-            IEnumerable<Set> foundSets = await _setsService.GetAllAsync(page,search);  
+            string userId = User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
+
+            IEnumerable<Set> foundSets = await _setsService.GetAllAsync(page,userId,search);  
 
             return Ok(foundSets);
         }

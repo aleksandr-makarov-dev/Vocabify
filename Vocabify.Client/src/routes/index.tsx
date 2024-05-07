@@ -1,3 +1,6 @@
+import Anonymous from "@/features/accounts/components/Anonymous";
+import Authorize from "@/features/accounts/components/Authorize";
+import { Admin } from "@/features/accounts/routes/Admin";
 import { Login } from "@/features/accounts/routes/Login";
 import { Register } from "@/features/accounts/routes/Register";
 import { Home } from "@/features/misc";
@@ -13,30 +16,44 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <MainLayout />,
+    element: <Authorize />,
     children: [
       {
-        index: true,
-        element: <Home />,
-      },
-      {
-        path: "library",
-        element: <Library />,
-      },
-      {
-        path: "create",
-        element: <Create />,
-      },
-      {
-        path: ":id",
+        element: <MainLayout />,
         children: [
           {
             index: true,
-            element: <Details />,
+            element: <Home />,
           },
           {
-            path: "practice",
-            element: <Practice />,
+            path: "library",
+            element: <Library />,
+          },
+          {
+            path: "create",
+            element: <Create />,
+          },
+          {
+            path: ":id",
+            children: [
+              {
+                index: true,
+                element: <Details />,
+              },
+              {
+                path: "practice",
+                element: <Practice />,
+              },
+            ],
+          },
+          {
+            element: <Authorize />,
+            children: [
+              {
+                path: "admin",
+                element: <Admin />,
+              },
+            ],
           },
         ],
       },
@@ -47,12 +64,17 @@ const router = createBrowserRouter([
     element: <AccountsLayout />,
     children: [
       {
-        path: "register",
-        element: <Register />,
-      },
-      {
-        path: "login",
-        element: <Login />,
+        element: <Anonymous />,
+        children: [
+          {
+            path: "register",
+            element: <Register />,
+          },
+          {
+            path: "login",
+            element: <Login />,
+          },
+        ],
       },
     ],
   },

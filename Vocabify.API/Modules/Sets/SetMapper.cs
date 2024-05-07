@@ -12,8 +12,6 @@ public partial class SetMapper
 
     [MapProperty(nameof(QuizletSetModel.WordLang),nameof(Set.TextLang))]
     [MapProperty(nameof(QuizletSetModel.DefLang), nameof(Set.DefinitionLang))]
-    [MapProperty(nameof(QuizletSetModel.NumTerms), nameof(Set.ItemsCount))]
-    [MapProperty(nameof(QuizletSetModel.WebUrl), nameof(Set.Url))]
     [MapProperty(nameof(QuizletSetModel.ThumbnailUrl), nameof(Set.Image))]
     public partial Set QuizletSetToSet(QuizletSetModel dto);
 }

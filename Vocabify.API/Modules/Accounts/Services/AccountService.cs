@@ -1,9 +1,5 @@
-﻿using System.Collections;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Vocabify.API.Modules.Accounts.Models;
 using Vocabify.API.Modules.Core.Exceptions;
 
@@ -13,13 +9,11 @@ public class AccountService : IAccountService
 {
     private readonly UserManager<IdentityUser> _userManager;
     private readonly SignInManager<IdentityUser> _signInManager;
-    private readonly IConfiguration _configuration;
 
-    public AccountService(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IConfiguration configuration)
+    public AccountService(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
     {
         _userManager = userManager;
         _signInManager = signInManager;
-        _configuration = configuration;
     }
 
     public async Task RegisterAsync(RegisterModel model)
@@ -37,6 +31,14 @@ public class AccountService : IAccountService
             Email = model.Email
         };
 
+        bool isFirst = !(await _userManager.Users.AnyAsync());
+
+
+        if (isFirst)
+        {
+            userToCreate.EmailConfirmed = true;
+        }
+
         IdentityResult createResult = await _userManager.CreateAsync(userToCreate, model.Password);
 
         if (!createResult.Succeeded)
@@ -44,7 +46,7 @@ public class AccountService : IAccountService
             throw new DomainException($"Failed to create user:{string.Join("; ",createResult.Errors.Select(e => e.Description))}");
         }
 
-        IdentityResult addToRoleResult = await _userManager.AddToRoleAsync(userToCreate, Roles.User);
+        IdentityResult addToRoleResult = await _userManager.AddToRoleAsync(userToCreate, isFirst ? Roles.Admin : Roles.User);
 
         if (!addToRoleResult.Succeeded)
         {
@@ -62,11 +64,11 @@ public class AccountService : IAccountService
             throw new UnauthorizedAccessException($"Email '{model.Email}' is already registered");
         }
 
-        string emailConfirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(foundUser);
+        foundUser.EmailConfirmed = true;
 
-        IdentityResult result = await _userManager.ConfirmEmailAsync(foundUser, emailConfirmationToken);
+        IdentityResult updateResult = await _userManager.UpdateAsync(foundUser);
 
-        if (!result.Succeeded)
+        if (!updateResult.Succeeded)
         {
             throw new DomainException($"Failed to confirm email '{model.Email}'");
         }
@@ -128,5 +130,37 @@ public class AccountService : IAccountService
         };
 
         return userInfo;
+    }
+
+    public async Task<IEnumerable<UserInfoModel>> GetUsersAsync()
+    {
+        IEnumerable<IdentityUser> foundUsers = await _userManager.Users.Where(u => !u.EmailConfirmed).ToListAsync();
+
+        var userInfos = await foundUsers
+            .ToAsyncEnumerable()
+            .SelectAwait(async (u) =>
+            {
+                IEnumerable<string> roles = await _userManager.GetRolesAsync(u);
+                return new UserInfoModel
+                {
+                    Email = u.Email,
+                    Roles = roles
+                };
+            })
+            .ToListAsync();
+
+        return userInfos;
+    }
+
+    public async Task ChangePasswordAsync(ChangePasswordModel model, string? role = null)
+    {
+        IdentityUser? foundUser = await _userManager.FindByEmailAsync(model.Email);
+
+        if (foundUser == null)
+        {
+            throw new NotFoundException($"User '{model.Email}' not found");
+        }
+
+
     }
 }
