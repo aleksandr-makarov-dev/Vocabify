@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Vocabify.API.Data;
 using Vocabify.API.Data.Entities;
+using Vocabify.API.Models;
 using Vocabify.API.Modules.Core.Exceptions;
 using Vocabify.API.Modules.Sets.Models;
 
@@ -59,7 +60,7 @@ public class SetsService:ISetsService
         await _context.SaveChangesAsync();
     }
 
-    public async Task<IEnumerable<Set>> GetAllAsync(int page, string userId, string? search)
+    public async Task<Paged<Set>> GetAllAsync(int page, string userId, string? search)
     {
         int take = 10;
 
@@ -70,10 +71,20 @@ public class SetsService:ISetsService
             query = query.Where(s => s.Title.ToLower().Contains(search.ToLower()));
         }
         
-        return await query.OrderByDescending(s=>s.CreatedAt)
+        IEnumerable<Set> setsPage = await query.OrderByDescending(s=>s.CreatedAt)
             .Skip((page-1)*10)
             .Take(take)
             .ToListAsync();
+
+        int count = await query.CountAsync();
+
+        return new Paged<Set>
+        {
+            Page = page,
+            Items = setsPage,
+            HasNext = count > page * 10,
+            HasPrevious = page > 1
+        };
     }
 
     public async Task<Set?> GetByIdAsync(Guid id)

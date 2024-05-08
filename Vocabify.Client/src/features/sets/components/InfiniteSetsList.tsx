@@ -1,28 +1,42 @@
-import List from "@/components/common/List";
 import { FC, HTMLAttributes } from "react";
-import { useSets } from "../api/getSets";
+import { useInfiniteSets } from "../api/getSets";
 import SetCard from "./SetCard";
 import { cn } from "@/lib/utils";
 import { useSearchParams } from "react-router-dom";
 import FormAlert from "@/components/common/FormAlert";
 import SetsEmptyView from "./SetsEmptyView";
 import LoadingView from "@/components/common/LoadingView";
+import InfiniteList from "@/components/common/InfiniteList";
 
-interface SetsListPros extends HTMLAttributes<HTMLDivElement> {}
+interface InfiniteSetsListPros extends HTMLAttributes<HTMLDivElement> {}
 
-const SetsList: FC<SetsListPros> = ({ className, ...other }) => {
+const InfiniteSetsList: FC<InfiniteSetsListPros> = ({
+  className,
+  ...other
+}) => {
   const [searchParams] = useSearchParams();
 
-  const { data, isLoading, isError, error } = useSets({
+  const {
+    data,
+    isLoading,
+    fetchNextPage,
+    isFetchingNextPage,
+    hasNextPage,
+    isError,
+    error,
+  } = useInfiniteSets({
     search: searchParams.get("search"),
   });
 
   return (
-    <List
+    <InfiniteList
+      fetchNextPage={fetchNextPage}
       className={cn("flex flex-col sm:grid sm:grid-cols-2 gap-10", className)}
-      items={data?.items}
+      items={data}
       isLoading={isLoading}
       isError={isError}
+      isFetchingNextPage={isFetchingNextPage}
+      hasNextPage={hasNextPage}
       emptyView={<SetsEmptyView />}
       loadingView={<LoadingView subtitle="Loading sets..." />}
       errorView={
@@ -43,4 +57,4 @@ const SetsList: FC<SetsListPros> = ({ className, ...other }) => {
   );
 };
 
-export default SetsList;
+export default InfiniteSetsList;

@@ -8,7 +8,7 @@ interface NavbarProps {
 
 const Navbar: FC<NavbarProps> = ({ navItems, slot }) => {
   return (
-    <nav className="fixed md:static bottom-0 w-full bg-white shadow-sm h-16 flex justify-center border-t border-boder">
+    <nav className="fixed md:static z-10 bottom-0 w-full bg-white shadow-sm h-16 flex justify-center border-t border-boder">
       <div className="px-5 py-2.5 flex items-center justify-center md:justify-start gap-x-10 w-full max-w-screen-xl">
         <div className="hidden md:block">
           <p className="text-lg font-medium">Vocabify</p>

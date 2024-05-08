@@ -1,7 +1,7 @@
 import { UseMutationOptions, useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { CreateSetSchema } from "../types";
-import { ObjectId } from "@/types";
+import { ObjectId, ProblemDetails } from "@/types";
 import axios from "@/lib/axios";
 
 const createSet = async (values: CreateSetSchema): Promise<ObjectId> => {
@@ -11,7 +11,7 @@ const createSet = async (values: CreateSetSchema): Promise<ObjectId> => {
 
 type UseCreateSetMutation = UseMutationOptions<
   ObjectId,
-  AxiosError,
+  AxiosError<ProblemDetails>,
   CreateSetSchema,
   unknown[]
 >;
@@ -22,7 +22,12 @@ type UseCreateSetOptions = Omit<
 >;
 
 export const useCreateSet = (options?: UseCreateSetOptions) => {
-  return useMutation<ObjectId, AxiosError, CreateSetSchema, unknown[]>({
+  return useMutation<
+    ObjectId,
+    AxiosError<ProblemDetails>,
+    CreateSetSchema,
+    unknown[]
+  >({
     mutationKey: ["sets", "create"],
     mutationFn: async (values) => {
       return await createSet(values);

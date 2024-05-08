@@ -12,5 +12,6 @@ namespace Vocabify.API.Data.Entities
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public string UserId { get; set; }
         public IdentityUser User { get; set; }
+        public List<Term> Terms { get; set; }
     }
 }

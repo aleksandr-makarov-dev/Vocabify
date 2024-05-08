@@ -13,7 +13,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { loginSchema } from "../schemas";
-import { useNavigate } from "react-router-dom";
 
 interface LoginFormProps {
   onSubmit: (values: RegisterSchema, reset: UseFormReset<LoginSchema>) => void;

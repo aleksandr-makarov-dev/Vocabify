@@ -12,3 +12,10 @@ export type ProblemDetails = {
   status: number;
   detail?: string;
 };
+
+export type Paged<T> = {
+  page: number;
+  items: T[];
+  hasNext: boolean;
+  hasPrevious: boolean;
+};

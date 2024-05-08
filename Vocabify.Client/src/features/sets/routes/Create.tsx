@@ -8,6 +8,7 @@ import { useImportSet } from "../api/importSet";
 import { useCreateTerms } from "@/features/terms/api/сreateTerms";
 import { TermFormSchema } from "@/features/terms/types";
 import { useNavigate } from "react-router-dom";
+import FormAlert from "@/components/common/FormAlert";
 
 export const Create: FC = () => {
   const navigate = useNavigate();
@@ -75,6 +76,12 @@ export const Create: FC = () => {
         subtitle="This is test subtitle for the page"
       />
       <SetImportForm onSubmit={onImport} isLoading={isLoading} />
+      <FormAlert
+        isError={isCreateSetError || isCreateTermsError}
+        error={
+          createSetError?.response?.data || createTermsError?.response?.data
+        }
+      />
       <SetForm
         onSubmit={onSubmit}
         isLoading={isCreateSetLoading || isCreateTermsLoading}

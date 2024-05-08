@@ -1,8 +1,8 @@
 import Header from "@/components/common/Header";
 import { FC } from "react";
-import SetsList from "../components/SetsList";
 import Search, { SearchFormSchema } from "@/components/common/Search";
 import { useSearchParams } from "react-router-dom";
+import InfiniteSetsList from "../components/InfiniteSetsList";
 
 export const Library: FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -32,7 +32,8 @@ export const Library: FC = () => {
           onSubmit={onSubmit}
           onReset={onReset}
         />
-        <SetsList />
+        {/* <SetsList /> */}
+        <InfiniteSetsList />
       </div>
     </div>
   );
