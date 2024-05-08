@@ -1,7 +1,7 @@
 {
   "name": "vocabify-client",
   "private": true,
-  "homepage": "https://aleksandrmakarov-dev.github.io/react-gh-pages",
+  "homepage": "https://aleksandrmakarov-dev.github.io",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
