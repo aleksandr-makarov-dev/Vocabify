@@ -54,7 +54,6 @@ namespace Vocabify.API.Modules.Sets
         [Authorize]
         public async Task<IActionResult> GetAll([FromQuery] string? search, [FromQuery] int page = 1)
         {
-            await Task.Delay(5000);
             string userId = User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
 
             Paged<Set> foundSets = await _setsService.GetAllAsync(page,userId,search);  

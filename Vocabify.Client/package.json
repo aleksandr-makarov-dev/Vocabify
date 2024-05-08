@@ -1,7 +1,6 @@
 {
   "name": "vocabify-client",
   "private": true,
-  "homepage": "https://aleksandrmakarov-dev.github.io/Vocabify",
   "version": "0.0.0",
   "type": "module",
   "scripts": {

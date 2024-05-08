@@ -77,6 +77,7 @@ var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();
+
 using (var scope = app.Services.CreateScope())
 {
     DbInitializer.Seed(scope).Wait();
@@ -97,6 +98,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+app.UseDefaultFiles();
 app.UseStaticFiles();
 app.MapFallbackToFile("index.html");
 
