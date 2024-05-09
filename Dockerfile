@@ -2,8 +2,6 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 as build
 
 WORKDIR /App
 
-EXPOSE 8080
-
 COPY . ./
 
 RUN dotnet restore
@@ -41,7 +39,8 @@ RUN apt-get update && \
 
 WORKDIR /App
 COPY --from=build /App/out .
-# ENTRYPOINT ["dotnet", "Vocabify.API.dll"]
+
+ENTRYPOINT ["dotnet", "Vocabify.API.dll"]
 
 # Use in heroku
-CMD ASPNETCORE_URLS=http://*:$PORT dotnet Vocabify.API.dll
+# CMD ASPNETCORE_URLS=http://*:$PORT dotnet Vocabify.API.dll

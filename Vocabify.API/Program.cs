@@ -8,7 +8,12 @@ using Vocabify.API.Modules.Sets;
 using Vocabify.API.Modules.Terms;
 
 var builder = WebApplication.CreateBuilder(args);
-var configuration = builder.Configuration;
+
+if (!builder.Environment.IsDevelopment())
+{
+    builder.WebHost.UseUrls("http://*:" + Environment.GetEnvironmentVariable("PORT"));
+}
+
 
 // Add services to the container.
 

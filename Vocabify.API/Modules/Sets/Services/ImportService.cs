@@ -22,33 +22,15 @@ public class ImportService:IImportService
         _setMapper = new SetMapper();
     }
 
-    public async Task<SetWithTermsModel?> FromQuizletAsync(string url)
+    public async Task<SetWithTermsModel?> FromFileAsync(IFormFile file)
     {
-        await new BrowserFetcher().DownloadAsync();
+        string content;
 
-        var browser = await Puppeteer.LaunchAsync(new LaunchOptions
+        using (var streamReader = new StreamReader(file.OpenReadStream()))
         {
-            Headless = true,
-            Args = ["--no-sandbox", "--disable-setuid-sandbox"]
-        });
-
-        var page = await browser.NewPageAsync();
-        await page.SetExtraHttpHeadersAsync(new Dictionary<string, string>
-        {
-            { "Cache-Control", "max-age=0" }
-        });
-
-        await page.SetUserAgentAsync(
-            "Mozilla/5.0 (Macintosh; Intel Mac OS X 13_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36");
-
-        await page.GoToAsync(url);
-
-        await page.WaitForSelectorAsync("script[id=__NEXT_DATA__]");
-
-        string content = await page.GetContentAsync();
-
-        await browser.CloseAsync();
-
+            content = await streamReader.ReadToEndAsync();
+        }
+        
         string pattern = @"<script id=""__NEXT_DATA__"" type=""application/json"">(.*?)<\/script>";
 
         Match match = Regex.Match(content, pattern);

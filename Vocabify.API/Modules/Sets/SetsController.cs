@@ -5,6 +5,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Vocabify.API.Data.Entities;
 using Vocabify.API.Models;
+using Vocabify.API.Modules.Core.Exceptions;
 using Vocabify.API.Modules.Sets.Models;
 using Vocabify.API.Modules.Sets.Services;
 
@@ -74,14 +75,25 @@ namespace Vocabify.API.Modules.Sets
             return Ok(foundSet);
         }
 
-        [HttpGet("import")]
-        public async Task<IActionResult> Import([FromQuery] string url)
+        [HttpPost("import")]
+        public async Task<IActionResult> Import(IFormFile file)
         {
-            SetWithTermsModel? importedSet = await _importService.FromQuizletAsync(url);
+
+            if (file.Length > 2097152)
+            {
+                throw new BadRequestException("Max file size is 2 mb");
+            }
+
+            if (file.ContentType != "text/html")
+            {
+                throw new BadRequestException("Only 'text/html' file type is allowed");
+            }
+
+            SetWithTermsModel? importedSet = await _importService.FromFileAsync(file);
 
             if (importedSet == null)
             {
-                return BadRequest($"Couldn't import quizlet set '{url}'");
+                throw new NotFoundException("Failed to import set from the file");
             }
 
             return Ok(importedSet);
