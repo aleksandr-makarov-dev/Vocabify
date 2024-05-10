@@ -8,16 +8,7 @@ erDiagram
     Id string PK
     Email string UK
     PasswordHash string
-    Image string
     EmailVerifiedAt date
-  }
-
-  SESSION {
-    Id string PK
-    Token string
-    ExpiresAt date
-    RevokedAt date
-    UserId string FK
   }
 
   SET {
@@ -43,6 +34,5 @@ erDiagram
   }
 
   USER ||--|{ SET : has
-  USER ||--|{ SESSION : has
   SET ||--|{ TERM : contains
 ```
