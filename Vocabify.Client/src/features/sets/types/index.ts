@@ -1,5 +1,9 @@
 import { z } from "zod";
-import { setFormSchema, setImportSchema } from "../schemas";
+import {
+  questionFormSchema,
+  setFormSchema,
+  setImportFormSchema,
+} from "../schemas";
 import { TermFormSchema } from "@/features/terms/types";
 
 export type Set = {
@@ -25,4 +29,6 @@ export type SetFormSchema = z.infer<typeof setFormSchema>;
 
 export type CreateSetSchema = Omit<SetFormSchema, "terms">;
 
-export type SetImportSchema = z.infer<typeof setImportSchema>;
+export type SetImportFormSchema = z.infer<typeof setImportFormSchema>;
+
+export type QuestionFormSchema = z.infer<typeof questionFormSchema>;

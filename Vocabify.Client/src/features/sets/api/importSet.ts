@@ -1,35 +1,46 @@
 import { SetWithTerms } from "@/features/sets/types";
-import { UseQueryOptions, useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import axios from "@/lib/axios";
+import { UseMutationOptions, useMutation } from "@tanstack/react-query";
+import { ProblemDetails } from "@/types";
 
-const importSet = async (values: UseImportSetParams) => {
-  const response = await axios.get<SetWithTerms>(
-    `/sets/import?url=${values.url}`
-  );
+const importSet = async (values: ImportSetParams) => {
+  var formData = new FormData();
+  formData.append("file", values.file);
+
+  const response = await axios.post<SetWithTerms>(`/sets/import`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
   return response.data;
 };
 
-type UseImportSetParams = {
-  url: string;
+type ImportSetParams = {
+  file: File;
 };
 
-type UseImportSetQuery = UseQueryOptions<
+type UseImportSetMutation = UseMutationOptions<
   SetWithTerms,
-  AxiosError,
-  SetWithTerms,
+  AxiosError<ProblemDetails>,
+  ImportSetParams,
   unknown[]
 >;
 
-type UseImportSetOptions = Omit<UseImportSetQuery, "queryKey" | "queryFn">;
+type UseImportSetOptions = Omit<
+  UseImportSetMutation,
+  "mutationKey" | "mutationFn"
+>;
 
-export const useImportSet = (
-  values: UseImportSetParams,
-  options?: UseImportSetOptions
-) => {
-  return useQuery<SetWithTerms, AxiosError, SetWithTerms, unknown[]>({
-    queryKey: ["sets", "import", values],
-    queryFn: async () => {
+export const useImportSet = (options?: UseImportSetOptions) => {
+  return useMutation<
+    SetWithTerms,
+    AxiosError<ProblemDetails>,
+    ImportSetParams,
+    unknown[]
+  >({
+    mutationKey: ["sets", "import"],
+    mutationFn: async (values) => {
       return await importSet(values);
     },
     ...options,

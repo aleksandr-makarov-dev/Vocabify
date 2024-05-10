@@ -41,9 +41,9 @@ const InfiniteList = <T,>({
   return (
     <div className="space-y-5">
       <div className={cn("grid grid-cols-3 gap-5", className)} {...other}>
-        {items?.pages.map((page, i) => (
+        {items?.pages?.map((page, i) => (
           <React.Fragment key={`page-${i}`}>
-            {page.items.map((item) => render(item))}
+            {page.items?.map((item) => render(item))}
           </React.Fragment>
         ))}
       </div>

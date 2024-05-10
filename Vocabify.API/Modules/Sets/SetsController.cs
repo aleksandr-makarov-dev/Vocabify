@@ -81,7 +81,7 @@ namespace Vocabify.API.Modules.Sets
 
             if (file.Length > 2097152)
             {
-                throw new BadRequestException("Max file size is 2 mb");
+                throw new BadRequestException("Max file size is 2 megabytes");
             }
 
             if (file.ContentType != "text/html")
