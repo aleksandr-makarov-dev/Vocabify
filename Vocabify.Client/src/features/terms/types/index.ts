@@ -14,3 +14,8 @@ export type Term = {
 export type TermFormSchema = z.infer<typeof termFormSchema>;
 
 export type TermsListFormSchema = z.infer<typeof termsListFormSchema>;
+
+export type TermQuestion = {
+  term: Term;
+  options: { value: string; isCorrect: boolean }[];
+};

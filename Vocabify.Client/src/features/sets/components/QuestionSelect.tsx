@@ -5,47 +5,30 @@ import {
   FormControl,
 } from "@/components/ui/form";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import {
-  PracticeFormSchema,
-  QuestionState,
-} from "@/features/sets/routes/Practice";
+import { QuestionFormSchema } from "@/features/sets/types";
 import { cn } from "@/lib/utils";
 import { FC } from "react";
 import { Control } from "react-hook-form";
+import { QuestionState } from "./SetQuizQuestion";
 
-interface TermSelectProps {
-  control: Control<PracticeFormSchema>;
+interface QuestionSelectProps {
+  control: Control<QuestionFormSchema>;
   options: { value: string; isCorrect: boolean }[];
   state: QuestionState;
 }
 
-const TermSelect: FC<TermSelectProps> = ({ options, control, state }) => {
+const QuestionSelect: FC<QuestionSelectProps> = ({
+  options,
+  control,
+  state,
+}) => {
   return (
     <FormField
       control={control}
       name="answer"
       render={({ field }) => {
-        const isSuccess = state === "success";
-        const isError = state === "error";
-        const isSkipped = state === "skip";
-
         return (
           <FormItem className="space-y-3">
-            <FormLabel
-              className={cn(
-                "text-base",
-                isSuccess && "text-green-600",
-                isError && "text-red-600"
-              )}
-            >
-              {state === "idle"
-                ? "Choose matching option:"
-                : isSuccess
-                ? "Congratulations, your answer is correct!"
-                : isSkipped
-                ? "Give this one a try later!"
-                : "Not quite, you're still learning!"}
-            </FormLabel>
             <FormControl>
               <RadioGroup
                 onValueChange={field.onChange}
@@ -85,4 +68,4 @@ const TermSelect: FC<TermSelectProps> = ({ options, control, state }) => {
   );
 };
 
-export default TermSelect;
+export default QuestionSelect;

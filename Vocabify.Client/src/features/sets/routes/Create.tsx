@@ -1,7 +1,7 @@
 import Header from "@/components/common/Header";
 import { FC, useState } from "react";
 import SetForm from "../components/SetForm";
-import { SetFormSchema, SetImportSchema } from "../types";
+import { SetFormSchema, SetImportFormSchema } from "../types";
 import { useCreateSet } from "../api/createSet";
 import SetImportForm from "../components/SetImportForm";
 import { useImportSet } from "../api/importSet";
@@ -65,7 +65,7 @@ export const Create: FC = () => {
     );
   };
 
-  const onImport = (values: SetImportSchema) => {
+  const onImport = (values: SetImportFormSchema) => {
     setUrl(values.url);
   };
 

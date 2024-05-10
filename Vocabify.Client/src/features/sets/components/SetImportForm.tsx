@@ -11,17 +11,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Import } from "lucide-react";
 import { FC } from "react";
 import { useForm } from "react-hook-form";
-import { setImportSchema } from "../schemas";
-import { SetImportSchema } from "../types";
-
+import { SetImportFormSchema } from "../types";
+import { setImportFormSchema } from "../schemas";
 interface SetImportFormProps {
-  onSubmit: (values: SetImportSchema) => void;
+  onSubmit: (values: SetImportFormSchema) => void;
   isLoading?: boolean;
 }
 
 const SetImportForm: FC<SetImportFormProps> = ({ onSubmit, isLoading }) => {
-  const form = useForm<SetImportSchema>({
-    resolver: zodResolver(setImportSchema),
+  const form = useForm<SetImportFormSchema>({
+    resolver: zodResolver(setImportFormSchema),
     defaultValues: {
       url: "",
     },

@@ -10,6 +10,10 @@ export const setFormSchema = z.object({
   terms: z.array(termFormSchema).min(2, "Must import at least 2 items"),
 });
 
-export const setImportSchema = z.object({
+export const setImportFormSchema = z.object({
   url: z.string().min(1),
+});
+
+export const questionFormSchema = z.object({
+  answer: z.string().min(1, "Choose one option"),
 });
