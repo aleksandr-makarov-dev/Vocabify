@@ -11,8 +11,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Import } from "lucide-react";
 import { FC } from "react";
 import { useForm } from "react-hook-form";
+import { MAX_FILE_SIZE, setImportFormSchema } from "../schemas";
 import { SetImportFormSchema } from "../types";
-import { setImportFormSchema } from "../schemas";
+
 interface SetImportFormProps {
   onSubmit: (values: SetImportFormSchema) => void;
   isLoading?: boolean;
@@ -21,9 +22,6 @@ interface SetImportFormProps {
 const SetImportForm: FC<SetImportFormProps> = ({ onSubmit, isLoading }) => {
   const form = useForm<SetImportFormSchema>({
     resolver: zodResolver(setImportFormSchema),
-    defaultValues: {
-      url: "",
-    },
   });
 
   return (
@@ -34,11 +32,19 @@ const SetImportForm: FC<SetImportFormProps> = ({ onSubmit, isLoading }) => {
       >
         <FormField
           control={form.control}
-          name="url"
-          render={({ field }) => (
+          name="file"
+          render={({ field: { onChange } }) => (
             <FormItem className="w-full">
               <FormControl>
-                <Input placeholder="Enter an url" {...field} />
+                <Input
+                  type="file"
+                  placeholder="Choose file"
+                  accept={".html"}
+                  size={MAX_FILE_SIZE}
+                  onChange={(event) =>
+                    onChange(event.target.files && event.target.files[0])
+                  }
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

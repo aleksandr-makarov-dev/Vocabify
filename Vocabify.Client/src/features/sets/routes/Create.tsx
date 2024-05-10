@@ -1,7 +1,7 @@
 import Header from "@/components/common/Header";
 import { FC, useState } from "react";
 import SetForm from "../components/SetForm";
-import { SetFormSchema, SetImportFormSchema } from "../types";
+import { SetFormSchema, SetImportFormSchema, SetWithTerms } from "../types";
 import { useCreateSet } from "../api/createSet";
 import SetImportForm from "../components/SetImportForm";
 import { useImportSet } from "../api/importSet";
@@ -12,16 +12,11 @@ import FormAlert from "@/components/common/FormAlert";
 
 export const Create: FC = () => {
   const navigate = useNavigate();
-  const [url, setUrl] = useState<string>("");
-
-  const { data, isLoading } = useImportSet(
-    {
-      url: url,
-    },
-    {
-      enabled: !!url && url.length > 0,
-    }
+  const [importedSet, setImportedSet] = useState<SetWithTerms | undefined>(
+    undefined
   );
+
+  const { mutate, isPending, isError, error } = useImportSet();
 
   const {
     mutate: createSetMutate,
@@ -66,7 +61,11 @@ export const Create: FC = () => {
   };
 
   const onImport = (values: SetImportFormSchema) => {
-    setUrl(values.url);
+    mutate(values, {
+      onSuccess: (values) => {
+        setImportedSet(values);
+      },
+    });
   };
 
   return (
@@ -75,7 +74,17 @@ export const Create: FC = () => {
         title="Create new study set"
         subtitle="This is test subtitle for the page"
       />
-      <SetImportForm onSubmit={onImport} isLoading={isLoading} />
+      <FormAlert
+        isError={isError}
+        error={
+          error?.response?.data ?? {
+            title: "Error",
+            status: 0,
+            detail: error?.message,
+          }
+        }
+      />
+      <SetImportForm onSubmit={onImport} isLoading={isPending} />
       <FormAlert
         isError={isCreateSetError || isCreateTermsError}
         error={
@@ -85,7 +94,7 @@ export const Create: FC = () => {
       <SetForm
         onSubmit={onSubmit}
         isLoading={isCreateSetLoading || isCreateTermsLoading}
-        set={data}
+        set={importedSet}
       />
     </div>
   );
