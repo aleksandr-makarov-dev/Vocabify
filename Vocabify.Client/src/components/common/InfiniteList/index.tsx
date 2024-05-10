@@ -36,8 +36,6 @@ const InfiniteList = <T,>({
 
   if (isError) return errorView;
 
-  console.log(items);
-
   if (items?.pages.length === 0 && !isLoading) return emptyView;
 
   return (
