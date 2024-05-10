@@ -78,8 +78,8 @@ const SetQuiz: FC<SetQuizProps> = ({ data }) => {
     }
 
     const isCorrect =
-      clearText(question.answer).toLowerCase() ===
-      clearText(answer).toLowerCase();
+      clearText(question.answer).trim().toLowerCase() ===
+      clearText(answer).trim().toLowerCase();
 
     if (isCorrect) {
       setAnswers((prev) => prev + 1);
